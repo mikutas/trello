@@ -17,8 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -76,7 +77,6 @@ func initConfig() {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-
 		// Search config in home directory with name ".trello" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".trello")
@@ -88,4 +88,15 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+	if err := viper.Unmarshal(&config); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
+
+type Config struct {
+	Key   string
+	Token string
+}
+
+var config Config
