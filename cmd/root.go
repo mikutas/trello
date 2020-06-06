@@ -95,8 +95,9 @@ func initConfig() {
 }
 
 type Config struct {
-	Key   string
-	Token string
+	Key      string
+	Token    string
+	MemberID string
 }
 
 var config Config
