@@ -17,6 +17,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/adlio/trello"
 	"github.com/spf13/cobra"
@@ -36,6 +37,17 @@ to quickly create a Cobra application.`,
 		fmt.Println("add called")
 		fmt.Println(config)
 		client := trello.NewClient(config.Key, config.Token)
+
+		boardName, err := cmd.PersistentFlags().GetString("board")
+		if err != nil {
+			panic(err)
+		}
+		if boardName == "" {
+			fmt.Println("oops")
+			os.Exit(1)
+		}
+		fmt.Println(boardName)
+
 		member, err := client.GetMember(config.MemberID, trello.Defaults())
 		if err != nil {
 			panic(err)
@@ -45,7 +57,10 @@ to quickly create a Cobra application.`,
 			panic(err)
 		}
 		for _, b := range boards {
-			fmt.Println(b.Name)
+			if b.Name == boardName {
+				lists, _ := b.GetCards(trello.Defaults())
+				fmt.Println(lists[0].Name)
+			}
 		}
 	},
 }
@@ -62,4 +77,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	addCmd.PersistentFlags().StringP("board", "b", "", "board name")
 }
