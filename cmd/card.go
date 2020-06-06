@@ -18,6 +18,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/adlio/trello"
 	"github.com/spf13/cobra"
 )
 
@@ -48,4 +49,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// cardCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	trello.NewClient("", "")
 }
