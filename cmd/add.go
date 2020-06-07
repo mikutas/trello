@@ -26,13 +26,8 @@ import (
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Add a card",
+	Long:  `Add a card on the specified list of the board.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//fmt.Println("add called")
 		//fmt.Println(config)
@@ -104,6 +99,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	addCmd.PersistentFlags().StringP("board", "b", "", "board name")
-	addCmd.PersistentFlags().StringP("list", "l", "", "list name")
+	addCmd.PersistentFlags().StringP("board", "b", "", "board name (required)")
+	addCmd.PersistentFlags().StringP("list", "l", "", "list name (required)")
 }
