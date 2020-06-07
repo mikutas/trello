@@ -34,8 +34,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
-		fmt.Println(config)
+		//fmt.Println("add called")
+		//fmt.Println(config)
 		client := trello.NewClient(config.Key, config.Token)
 
 		boardName, err := cmd.PersistentFlags().GetString("board")
@@ -43,10 +43,27 @@ to quickly create a Cobra application.`,
 			panic(err)
 		}
 		if boardName == "" {
-			fmt.Println("oops")
+			fmt.Println("board not populated")
 			os.Exit(1)
 		}
-		fmt.Println(boardName)
+		//fmt.Println(boardName)
+
+		listName, err := cmd.PersistentFlags().GetString("list")
+		if err != nil {
+			panic(err)
+		}
+		if listName == "" {
+			fmt.Println("list not populated")
+			os.Exit(1)
+		}
+		//fmt.Println(listName)
+
+		cardName := cmd.Flags().Arg(0)
+		description := cmd.Flags().Arg(1)
+		if cardName == "" {
+			fmt.Println("card name not populated")
+			os.Exit(1)
+		}
 
 		member, err := client.GetMember(config.MemberID, trello.Defaults())
 		if err != nil {
@@ -58,8 +75,18 @@ to quickly create a Cobra application.`,
 		}
 		for _, b := range boards {
 			if b.Name == boardName {
-				lists, _ := b.GetCards(trello.Defaults())
-				fmt.Println(lists[0].Name)
+				lists, _ := b.GetLists(trello.Defaults())
+				for _, l := range lists {
+					if l.Name == listName {
+						c := &trello.Card{Name: cardName, Desc: description}
+						err := l.AddCard(c, trello.Defaults())
+						if err == nil {
+							fmt.Println(c.ShortURL + " created")
+						} else {
+							panic(err)
+						}
+					}
+				}
 			}
 		}
 	},
@@ -78,4 +105,5 @@ func init() {
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	addCmd.PersistentFlags().StringP("board", "b", "", "board name")
+	addCmd.PersistentFlags().StringP("list", "l", "", "list name")
 }
