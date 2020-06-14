@@ -38,8 +38,11 @@ var addCmd = &cobra.Command{
 			panic(err)
 		}
 		if boardName == "" {
-			fmt.Println("board not populated")
-			os.Exit(1)
+			boardName = config.Board
+			if boardName == "" {
+				fmt.Println("board not provided")
+				os.Exit(1)
+			}
 		}
 		//fmt.Println(boardName)
 
@@ -48,7 +51,7 @@ var addCmd = &cobra.Command{
 			panic(err)
 		}
 		if listName == "" {
-			fmt.Println("list not populated")
+			fmt.Println("list not provided")
 			os.Exit(1)
 		}
 		//fmt.Println(listName)
@@ -56,7 +59,7 @@ var addCmd = &cobra.Command{
 		cardName := cmd.Flags().Arg(0)
 		description := cmd.Flags().Arg(1)
 		if cardName == "" {
-			fmt.Println("card name not populated")
+			fmt.Println("card name not provided")
 			os.Exit(1)
 		}
 
@@ -99,6 +102,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	addCmd.PersistentFlags().StringP("board", "b", "", "board name (required)")
+	addCmd.PersistentFlags().StringP("board", "b", "", "board name (required if not defined in config file)")
 	addCmd.PersistentFlags().StringP("list", "l", "", "list name (required)")
 }

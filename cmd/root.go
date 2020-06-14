@@ -93,6 +93,7 @@ type Config struct {
 	Key      string
 	Token    string
 	MemberID string
+	Board    string
 }
 
 var config Config
