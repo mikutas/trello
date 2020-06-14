@@ -50,18 +50,18 @@ var addCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		if listName == "" {
-			fmt.Println("list not provided")
-			os.Exit(1)
-		}
 		//fmt.Println(listName)
-
+		index, err := cmd.PersistentFlags().GetInt("index")
+		if err != nil {
+			panic(err)
+		}
 		cardName := cmd.Flags().Arg(0)
 		description := cmd.Flags().Arg(1)
 		if cardName == "" {
 			fmt.Println("card name not provided")
 			os.Exit(1)
 		}
+		c := &trello.Card{Name: cardName, Desc: description}
 
 		member, err := client.GetMember(config.MemberID, trello.Defaults())
 		if err != nil {
@@ -74,19 +74,35 @@ var addCmd = &cobra.Command{
 		for _, b := range boards {
 			if b.Name == boardName {
 				lists, _ := b.GetLists(trello.Defaults())
-				for _, l := range lists {
-					if l.Name == listName {
-						c := &trello.Card{Name: cardName, Desc: description}
-						err := l.AddCard(c, trello.Defaults())
-						if err == nil {
-							fmt.Println(c.ShortURL + " created")
-						} else {
-							panic(err)
+				var err error
+				if listName == "" {
+					if len(lists) <= index {
+						fmt.Println("The list does not exist")
+						os.Exit(1)
+					}
+					err = lists[index].AddCard(c, trello.Defaults())
+
+				} else {
+					for _, l := range lists {
+						if l.Name == listName {
+							err = l.AddCard(c, trello.Defaults())
 						}
 					}
+					if c.CreatedAt().IsZero() {
+						fmt.Println("The list not found")
+						os.Exit(1)
+					}
+				}
+				if err == nil {
+					fmt.Println(c.ShortURL + " created")
+					os.Exit(0)
+				} else {
+					panic(err)
 				}
 			}
 		}
+		fmt.Println("The board not found")
+		os.Exit(1)
 	},
 }
 
@@ -103,5 +119,6 @@ func init() {
 	// is called directly, e.g.:
 	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	addCmd.PersistentFlags().StringP("board", "b", "", "board name (required if not defined in config file)")
-	addCmd.PersistentFlags().StringP("list", "l", "", "list name (required)")
+	addCmd.PersistentFlags().StringP("list", "l", "", "list name")
+	addCmd.PersistentFlags().IntP("index", "i", 0, "list index (ignored if list name provided)")
 }
