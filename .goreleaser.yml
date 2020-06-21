@@ -6,5 +6,7 @@ builds:
       - darwin
     goarch:
       - amd64
+    ldflags:
+      - -X github.com/tkms0106/trello/cmd.version={{.Version}}
 archives:
   - format: binary

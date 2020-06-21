@@ -26,12 +26,14 @@ import (
 )
 
 var cfgFile string
+var version string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "trello",
-	Short: "",
-	Long:  ``,
+	Use:     "trello",
+	Short:   "",
+	Long:    ``,
+	Version: version,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
