@@ -1,6 +1,6 @@
 module github.com/mikutas/trello
 
-go 1.14
+go 1.18
 
 require (
 	github.com/adlio/trello v1.8.0
