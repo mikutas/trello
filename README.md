@@ -3,7 +3,7 @@
 ## Installation
 
 Download binary
-https://github.com/tkms0106/trello/releases
+https://github.com/mikutas/trello/releases
 
 ## Setup
 

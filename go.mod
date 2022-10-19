@@ -1,4 +1,4 @@
-module github.com/tkms0106/trello
+module github.com/mikutas/trello
 
 go 1.14
 

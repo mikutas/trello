@@ -7,6 +7,6 @@ builds:
     goarch:
       - amd64
     ldflags:
-      - -X github.com/tkms0106/trello/cmd.version={{.Version}}
+      - -X github.com/mikutas/trello/cmd.version={{.Version}}
 archives:
   - format: binary

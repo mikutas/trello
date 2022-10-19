@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/tkms0106/trello/cmd"
+import "github.com/mikutas/trello/cmd"
 
 func main() {
 	cmd.Execute()
