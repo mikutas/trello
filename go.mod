@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/adlio/trello v1.10.0
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 )
 
